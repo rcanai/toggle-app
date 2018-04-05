@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Toggle app</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<main>
+  <div class="columns is-gapless is-multiline is-mobile">
+    <div class="column is-12">
+      <% if (item.status) { %>
+        <section class="hero is-large is-warning">
+          <div class="hero-body">
+            <div class="container">
+              <h1 class="title">
+                Is ON now
+              </h1>
+            </div>
+          </div>
+        </section>
+      <% } else {%>
+        <section class="hero is-large is-light">
+          <div class="hero-body">
+            <div class="container">
+              <h1 class="title">
+                Is OFF now
+              </h1>
+            </div>
+          </div>
+        </section>
+      <% } %>
+    </div>
+    <div class="column is-half" style="cursor:pointer;">
+      <section onclick="on()" class="hero is-warning">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title">
+              ON
+            </h1>
+            <h2 class="subtitle">
+              Click here !
+            </h2>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="column is-half" style="cursor:pointer;">
+      <section onclick="off()" class="hero is-light">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title">
+              OFF
+            </h1>
+            <h2 class="subtitle">
+              Click here !
+            </h2>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+<script src="/assets/axios.js"></script>
+<script src="/assets/app.js"></script>
+</body>
+</html>

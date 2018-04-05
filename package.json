@@ -1,0 +1,17 @@
+{
+  "name": "toggle-app",
+  "version": "1.0.0",
+  "main": "serve.js",
+  "license": "MIT",
+  "scripts": {
+    "serve": "node server.js",
+    "demon": "forever start server.js",
+    "kill": "forever stop server.js"
+  },
+  "dependencies": {
+    "ejs": "^2.5.8",
+    "express": "^4.16.3",
+    "forever": "^0.15.3",
+    "mongodb": "^3.0.5"
+  }
+}
