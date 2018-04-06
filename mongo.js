@@ -3,6 +3,7 @@ const MongoClient = require('mongodb').MongoClient;
 const accessPoint = 'mongodb://127.0.0.1:27017';
 
 const defaultRecord = {
+  id: 1,
   status: false,
   updated_at: new Date()
 };
