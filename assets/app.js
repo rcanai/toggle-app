@@ -1,4 +1,6 @@
-const on = function() {
+axios.defaults.crossDomain = true;
+
+var on = function() {
   axios.post('/update', {
     status: true
   }).then(function(response) {
@@ -6,7 +8,7 @@ const on = function() {
   });
 }
 
-const off = function() {
+var off = function() {
   axios.post('/update', {
     status: false
   }).then(function(response) {

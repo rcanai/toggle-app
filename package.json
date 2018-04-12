@@ -9,6 +9,7 @@
     "kill": "forever stop server.js"
   },
   "dependencies": {
+    "cors": "^2.8.4",
     "ejs": "^2.5.8",
     "express": "^4.16.3",
     "forever": "^0.15.3",
