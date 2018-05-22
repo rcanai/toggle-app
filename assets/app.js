@@ -4,7 +4,9 @@ var on = function() {
   axios.post('/update', {
     status: true
   }).then(function(response) {
-    location.reload(false);
+    console.log(response);
+  }).catch(function(error) {
+    console.error(error);
   });
 }
 
@@ -12,7 +14,8 @@ var off = function() {
   axios.post('/update', {
     status: false
   }).then(function(response) {
-    location.reload(false);
+    console.log(response);
+  }).catch(function(error) {
+    console.error(error);
   });
 }
-

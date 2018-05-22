@@ -2,9 +2,11 @@ const express = require('express');
 const mongo = require('./mongo.js');
 const cors = require('cors');
 
-mongo.updateStatus();
-
 const exp = express();
+
+/**
+ * setting
+ */
 exp.listen(3000);
 
 exp.use(express.json());
@@ -21,21 +23,54 @@ exp.use(function(req, res, next) {
   next();
 });
 
+/**
+ * routes
+ */
 exp.get('/', (req, res) => {
-  mongo.getStatus().then((item) => {
-    res.render('index', {item: item});
-  });
+  mongo.getStatus()
+    .then((item) => {
+      res.status(200).render('index', {item: item});
+    }).catch((err) => {
+      res.status(400).json(err);
+    })
+  ;
 });
 
 exp.get('/status', cors(), (req, res) => {
-  mongo.getStatus().then((item) => {
-    res.json(item);
-  });
+  mongo.getStatus()
+    .then((item) => {
+      res.status(200).json(item);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    })
+  ;
+});
+
+exp.get('/history', cors(), (req, res) => {
+  mongo.getHistory()
+    .then((items) => {
+      res.status(200).json(items);
+    })
+    .catch((err) => {
+      res.status(422).json(err);
+    })
+  ;
 });
 
 exp.post('/update', cors(), (req, res) => {
   const params = req.body || {};
-  mongo.updateStatus(!!params.status).then((item) => {
-    res.json(item);
-  });
+  mongo.updateStatus(!!params.status)
+    .then((item) => {
+      res.status(200).json(item);
+    })
+    .catch((err) => {
+      res.status(422).json(err);
+    })
+  ;
 });
+
+/**
+ * mongo connect
+ */
+mongo.initialize();

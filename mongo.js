@@ -2,35 +2,43 @@ const MongoClient = require('mongodb').MongoClient;
 
 const accessPoint = 'mongodb://127.0.0.1:27017';
 
-const defaultRecord = {
-  id: 1,
-  status: false,
-  updated_at: new Date()
+let db = null;
+
+const addFirstRecord = function (collection) {
+  collection.remove();
+  collection.insert({
+    id: 1,
+    status: false,
+    updated_at: new Date()
+  });
 };
 
-const getCollection = function (callback) {
+const addHistory = function (status) {
+  db.collection('history', (err, collection) => {
+    collection.insert({
+      status: status,
+      created_at: new Date()
+    });
+  });
+};
+
+exports.initialize = function () {
   MongoClient.connect(accessPoint, (err, client) => {
     if (err) {
       return console.dir(err);
     }
-    const db = client.db('mydb');
-    db.collection('main', (err, collection) => {
-      if (typeof callback === 'function') {
-        callback({ err, db, client, collection });
-      }
-    });
+    db = client.db('mydb');
   });
 };
 
 exports.getStatus = function () {
   return new Promise((resolve, reject) => {
-    getCollection(({ client, collection }) => {
+    db.collection('main', (err, collection) => {
       collection.find({id: 1}).toArray((err, items) => {
-        client.close();
         if (items && items[0]) {
-          resolve(items[0]);
+          return resolve(items[0]);
         } else {
-          resolve({});
+          return resolve({});
         }
       });
     });
@@ -38,29 +46,41 @@ exports.getStatus = function () {
 };
 
 exports.updateStatus = function (status) {
+  const _status = !!status;
   return new Promise((resolve, reject) => {
-    getCollection(({ client, collection }) => {
+    db.collection('main', (err, collection) => {
       collection.find({id: 1}).toArray((err, items) => {
         if (items.length !== 1) {
-          collection.remove();
-          defaultRecord.updated_at = new Date();
-          collection.insert(defaultRecord);
+          // First record
+          addFirstRecord(collection);
+        } else if(items[0].status === _status) {
+          // Same as before
+          return reject({});
         }
 
         const updateParam = {
-          status: !!status,
-          datetime: new Date()
+          status: _status,
+          updated_at: new Date()
         };
 
-        collection.update({}, {
+        collection.update({id: 1}, {
           $set: updateParam
         });
 
-        client.close();
+        addHistory(_status);
 
-        resolve(updateParam);
+        return resolve(updateParam);
       });
     });
   });
 };
 
+exports.getHistory = function () {
+  return new Promise((resolve, reject) => {
+    db.collection('history', (err, collection) => {
+      collection.find({}).toArray((err, items) => {
+        return resolve(items);
+      });
+    });
+  });
+};
