@@ -8,8 +8,9 @@ mongo 3
 
 localhost:3000
 
-index: /  
-get status: /status  
-update: /update  
+[get]  index:   /  
+[get]  status:  /status  
+[get]  history: /status  
+[post] update:  /update  
 
 EOF
